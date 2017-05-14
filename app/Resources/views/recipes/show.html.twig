@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Start
+{% endblock %}
+ {% block body %}
+     <div >
+         PRZEPISY
+         <ul>
+             {% for recipe in recipes %}
+                 <li>{{ recipe }}</li>
+             {% endfor %}
+         </ul>
+     </div>
+
+ {% endblock %}

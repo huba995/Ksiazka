@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Start
+{% endblock %}
+ {% block body %}
+     <div >
+         PRZEPISY
+         <ul>
+             {% for recipe in recipes %}
+                 <li><a href="{{ path('dish', {"param" : recipe.getId() }) }}">{{ recipe.getNameRecipe() }}</a></li>
+             {% endfor %}
+         </ul>
+     </div>
+
+ {% endblock %}
