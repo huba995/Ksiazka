@@ -132,7 +132,6 @@ class Recipes
     public function setCreatedAdd($createdAdd)
     {
         $this->created_add = $createdAdd;
-
         return $this;
     }
 
@@ -220,16 +219,28 @@ class Recipes
 
     /**
      * @ORM\OneToMany(targetEntity="Ingredients", mappedBy="recipes")
-     * @ORM\OneToMany(targetEntity="Comments", mappedBy="recipes")
      */
     protected $ingredients;
-    protected $comments;
+
 
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
-        $this->comments = new ArrayCollection();
+        $this->comments=new ArrayCollection();
     }
+
+    /**
+     * @ORM\OneToMany(targetEntity="Comments", mappedBy="recipes")
+     */
+
+    protected $comments;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Tags",inversedBy="recipes")
+     * @ORM\JoinTable(name="recipes_id")
+     *
+     */
+    protected $tag;
 
     /**
      * Add ingredient

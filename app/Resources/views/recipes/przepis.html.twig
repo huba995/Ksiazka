@@ -6,6 +6,10 @@
      <div >
          <h1>{{ recipes.getNameRecipe() }}</h1>
          Składniki potrzebne do przygotowania:
+         <h3>TAGI:</h3>
+         {% for tag in tags %}
+             {{ tag.getTag() }}
+         {% endfor %}
          <ul>
              {% for ingredient in ingredients %}
                  <li>{{ ingredient.getNameIngredient() }}</li>
@@ -13,6 +17,23 @@
          </ul>
          Przygotowanie: <br>
          {{ recipes.getDescription() }}
+
+         <br>
+         <form action="/przepisy/dwa/dodanykomentarz/{{ recipes.getId() }}" method="post">
+             <input type=text name="comment" />
+             <input type=submit value="dodaj komentarz">
+         </form>
+         <br>
+
+     </div>
+     <div class="kom">
+         <h2>Komentarze:</h2>
+         <ul>
+             {% for comment in comments %}
+               <li type="square">{{ comment.getComment()}} <br></li>
+             {% endfor %}
+         </ul>
+
      </div>
 
  {% endblock %}

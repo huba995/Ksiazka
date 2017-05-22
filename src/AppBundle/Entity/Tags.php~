@@ -3,10 +3,11 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Tags
- *
+ * @UniqueEntity("tag")
  * @ORM\Table(name="tags")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TagsRepository")
  */
@@ -24,7 +25,7 @@ class Tags
     /**
      * @var string
      *
-     * @ORM\Column(name="tag", type="string", length=255)
+     * @ORM\Column(name="tag", type="string", length=255, unique=true)
      */
     private $tag;
 
@@ -62,4 +63,9 @@ class Tags
     {
         return $this->tag;
     }
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Recipes", mappedBy="tag")
+     */
+    protected $recipes;
 }

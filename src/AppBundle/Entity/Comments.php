@@ -13,6 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
 class Comments
 {
     /**
+     * @ORM\ManyToOne(targetEntity="Recipes", inversedBy="comments")
+     * @ORM\JoinColumn(name="recipes_id", referencedColumnName="id")
+     */
+    protected $recipes;
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -92,5 +97,29 @@ class Comments
     public function getCreatedAdd()
     {
         return $this->created_add;
+    }
+
+    /**
+     * Set recipes
+     *
+     * @param \AppBundle\Entity\Recipes $recipes
+     *
+     * @return Comments
+     */
+    public function setRecipes(\AppBundle\Entity\Recipes $recipes = null)
+    {
+        $this->recipes = $recipes;
+
+        return $this;
+    }
+
+    /**
+     * Get recipes
+     *
+     * @return \AppBundle\Entity\Recipes
+     */
+    public function getRecipes()
+    {
+        return $this->recipes;
     }
 }

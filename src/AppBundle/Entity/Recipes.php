@@ -226,7 +226,21 @@ class Recipes
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
+        $this->comments=new ArrayCollection();
     }
+
+    /**
+     * @ORM\OneToMany(targetEntity="Comments", mappedBy="recipes")
+     */
+
+    protected $comments;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Tags",inversedBy="recipes")
+     * @ORM\JoinTable(name="recipes_id")
+     *
+     */
+    protected $tag;
 
     /**
      * Add ingredient
@@ -263,4 +277,72 @@ class Recipes
     }
 
 
+
+    /**
+     * Add comment
+     *
+     * @param \AppBundle\Entity\Comments $comment
+     *
+     * @return Recipes
+     */
+    public function addComment(\AppBundle\Entity\Comments $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \AppBundle\Entity\Comments $comment
+     */
+    public function removeComment(\AppBundle\Entity\Comments $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Add tag
+     *
+     * @param \AppBundle\Entity\Tags $tag
+     *
+     * @return Recipes
+     */
+    public function addTag(\AppBundle\Entity\Tags $tag)
+    {
+        $this->tag[] = $tag;
+
+        return $this;
+    }
+
+    /**
+     * Remove tag
+     *
+     * @param \AppBundle\Entity\Tags $tag
+     */
+    public function removeTag(\AppBundle\Entity\Tags $tag)
+    {
+        $this->tag->removeElement($tag);
+    }
+
+    /**
+     * Get tag
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTag()
+    {
+        return $this->tag;
+    }
 }

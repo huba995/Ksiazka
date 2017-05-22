@@ -10,6 +10,9 @@
                  <li><a href="{{ path('dish', {"param" : recipe.getId() }) }}">{{ recipe.getNameRecipe() }}</a></li>
              {% endfor %}
          </ul>
+         <form action="/php/csv.php" method="get">
+             <input type="submit" name="przycisk" value="Dodaj">
+         </form>
      </div>
 
  {% endblock %}
