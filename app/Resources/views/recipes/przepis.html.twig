@@ -17,7 +17,10 @@
          </ul>
          Przygotowanie: <br>
          {{ recipes.getDescription() }}
-
+         <h4>Ocena:</h4>
+         {{ form_start(form3) }}
+         {{ form_widget(form3) }}
+         {{ form_end(form3) }}
          <br>
          <form action="/przepisy/dwa/dodanykomentarz/{{ recipes.getId() }}" method="post">
              <input type=text name="comment" />
@@ -26,14 +29,29 @@
          <br>
 
      </div>
+
+     {{ form_start(form) }}
+     {{ form_widget(form) }}
+     {{ form_end(form) }}
+
      <div class="kom">
          <h2>Komentarze:</h2>
          <ul>
              {% for comment in comments %}
                <li type="square">{{ comment.getComment()}} <br></li>
+                 {#<li type="square">{{ comment.getComment()|raw}} <br></li>
+                 gdy zastosuje raw to wtedy znaki które są znacznikami html zostaną tak odczytane,
+                   domyślnie w twig to blokuje i zamienia na zwykły tekst
+                 #}
              {% endfor %}
          </ul>
 
      </div>
+     <br>
+     <br>
+     {{ form_start(form2) }}
+     {{ form_widget(form2) }}
+     {{ form_end(form2) }}
+
 
  {% endblock %}

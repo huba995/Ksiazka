@@ -6,7 +6,7 @@
  * Time: 10:11
  */
 
-$row = 1;
+
 if (($uchwyt = fopen ("test.csv","r")) !== FALSE) {
     while (($data = fgetcsv($uchwyt, 1000, ",")) !== FALSE)  {
        // $num = count($data);

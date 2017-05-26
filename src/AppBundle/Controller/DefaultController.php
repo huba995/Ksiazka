@@ -5,8 +5,13 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Ingredients;
 use AppBundle\Entity\Recipes;
 use AppBundle\Entity\Tags;
+use AppBundle\Entity\Task;
+use AppBundle\Form\CommentType;
+use AppBundle\Form\RateType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Comments;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +26,28 @@ class DefaultController extends Controller
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig');
     }
+    /**
+     * @Route("/test")
+     */
+    public function testAction()
+    {
+        $messageGenerator=$this->container->get('app.message_generator');
+
+        $message = $messageGenerator->getHappyMessage();
+        $this->addFlash('success',$message);
+        return new Response($message);
+    }
+
+    /**
+     * @Route("/test2")
+     */
+    public function test2()
+    {
+        $rate_recipe=$this->container->get('app.rate_recipe');
+        $db_connect=$rate_recipe->lookSomething(2);
+        return new Response($db_connect);
+    }
+
     /**
      * @Route("dodaj/tagi")
      */
@@ -158,7 +185,7 @@ class DefaultController extends Controller
        // $recipes = $repository->findAll();
 
         $em=$this->getDoctrine()->getManager();
-        $recipes=$em->getRepository('AppBundle:Recipes')->findAll();
+        $recipes=$em->getRepository('AppBundle:Recipes')->findmydisplay();
                 if (!$recipes) {
                     throw $this->createNotFoundException(
                         'No product found for id '
@@ -169,7 +196,7 @@ class DefaultController extends Controller
     /**
      * @Route("przepisy/dwa/{param}", name="dish")
      */
-    public function DishAction($param)
+    public function DishAction($param,Request $request)
     {
 /*
         $repository = $this->getDoctrine()->getRepository('AppBundle:Ingredients');
@@ -189,9 +216,86 @@ class DefaultController extends Controller
         $tags = $recipes2->getTag();
 
         $comments=$recipes2->getComments();
+        //Wystawienie oceny
+        $form3=$this->createForm(RateType::class,$recipes2);
+        $form3->handleRequest($request);
 
-        return $this->render('recipes/przepis.html.twig',['ingredients'=>$ingredients,'recipes'=>$recipes2,'tags'=>$tags,'comments'=>$comments]);
+       // if ($form3->isSubmitted() && $form3->getName())
+        if( $form3->get('minus')->isClicked())
+        {
+           // $form3->get('minus')->isClicked();
+            $rate_recipe=$this->container->get('app.rate_recipe');
+            $rate_recipe->change_minus($param);
+            return $this->redirectToRoute('dish',['param'=>$param]);
+        }
+        if($form3->get('plus')->isClicked())
+        {
+            $rate_recipe=$this->container->get('app.rate_recipe');
+            $rate_recipe->change_plus($param);
 
+            return $this->redirectToRoute('dish',['param'=>$param]);
+        }
+
+
+
+
+        //skorzystanie z encji komentarza
+        $comment=new Comments();
+        $comment->setComment('Wpisz komentarz');
+        $comment->setRecipes($recipes2);
+
+        $form=$this->createFormBuilder($comment)
+            ->add('comment',TextType::class,array('label'=>false,'required'=>false))
+            ->add('dodaj', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $comment->setCreatedAdd(new \DateTime("now"));
+            $comment = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+           return $this->redirectToRoute('dish',['param'=>$param]);
+        }
+
+        //dodanie kometarza wykorzystując własną klasę
+
+        $comment1=new Comments();
+        $comment1->setComment('Tu wpisz swój komentarz');
+        $comment1->setRecipes($recipes2);
+        $form2=$this->createForm(CommentType::class,$comment1);
+        $form2->handleRequest($request);
+        if ($form2->isSubmitted() && $form2->isValid())
+        {
+            $comment1->setCreatedAdd(new \DateTime("now"));
+            $comment1 = $form2->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment1);
+            $em->flush();
+            return $this->redirectToRoute('dish',['param'=>$param]);
+        }
+
+            return $this->render('recipes/przepis.html.twig',['ingredients'=>$ingredients,'recipes'=>$recipes2,'tags'=>$tags,'comments'=>$comments,'form'=>$form->createView(),'form2'=>$form2->createView(),'form3'=>$form3->createView()]);
+
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route("przepisy/dwa/komentarz/form")
+     */
+    public function formAction(Request $request)
+    {
+        $task=new Task();
+        $task->setTask('okej ');
+
+        $form=$this->createFormBuilder($task)
+            ->add('task',TextType::class)
+            ->add('dodaj', SubmitType::class)
+            ->getForm();
+        return $this->render('recipes/przepis.html.twig',array('form'=>$form->createView(),));
     }
 
 }

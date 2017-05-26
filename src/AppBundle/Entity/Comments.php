@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Comments
  *
@@ -30,6 +30,7 @@ class Comments
      * @var string
      *
      * @ORM\Column(name="comment", type="text")
+     * @Assert\NotBlank(message="Pole nie może być puste!")
      */
     private $comment;
 
