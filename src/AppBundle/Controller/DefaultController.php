@@ -6,8 +6,12 @@ use AppBundle\Entity\Ingredients;
 use AppBundle\Entity\Recipes;
 use AppBundle\Entity\Tags;
 use AppBundle\Entity\Task;
+use AppBundle\Entity\User;
 use AppBundle\Form\CommentType;
+use AppBundle\Form\LoginType;
 use AppBundle\Form\RateType;
+use AppBundle\Form\RegistrationType;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -298,4 +302,53 @@ class DefaultController extends Controller
         return $this->render('recipes/przepis.html.twig',array('form'=>$form->createView(),));
     }
 
+    // Dodawanie logowania
+
+    /**
+     * @Route("/logowanie", name="login")
+     */
+
+    public function loginAction(Request $request)
+    {
+        $form=$this->createForm(LoginType::class);
+        $form->handleRequest($request);
+        return $this->render('recipes/logowanie.html.twig',array('form'=>$form->createView(),));
+    }
+
+    /**
+     * @Route("/rejestracja")
+     */
+    public function registrationAction(Request $request)
+    {
+        $user=new User();
+        $form=$this->createForm(RegistrationType::class, $user);
+        $form->handleRequest($request);
+
+        if( $form->isSubmitted() && $form->isValid())
+        {
+            $em=$this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            /*
+            $name=$form->get('name')->getData();
+            $surname=$form->get('surname')->getData();
+            $email=$form->get('email')->getData();
+            $password=$form->get('password')->getData();
+            $registration=$this->container->get('app.registration');
+            $registration-> add_user($name,$surname,$email,$password);
+          //  return $this->redirectToRoute('login');
+*/
+        }
+
+        return $this->render('recipes/rejestracja.html.twig',array('form'=>$form->createView(),));
+    }
+
+    /**
+     * @Route("/admin")
+     */
+    public function adminAction()
+    {
+        return new Response('<html><body>Admin page!</body></html>');
+    }
 }
+

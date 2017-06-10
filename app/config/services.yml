@@ -14,3 +14,6 @@ services:
     app.rate_recipe:
       class: AppBundle\Service\RateRecipe
       arguments: ['@doctrine.dbal.default_connection']
+    app.registration:
+      class: AppBundle\Service\RegistrationService
+      arguments: ['@doctrine.dbal.default_connection']

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Start
+{% endblock %}
+ {% block body %}
+     <div >
+         <h1>Zaloguj się na konto:</h1>
+         {{ form_start(form) }}
+         {{ form_widget(form) }}
+         {{ form_end(form) }}
+         <br>
+         <a href="/rejestracja"> Zarejestruj się !</a>
+     </div>
+
+ {% endblock %}

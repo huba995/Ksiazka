@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Start
+{% endblock %}
+ {% block body %}
+     <div >
+       <h1> Wpisz dane i zarejestruj się !</h1>
+         {{ form_start(form) }}
+         {{ form_widget(form) }}
+         {{ form_end(form) }}
+     </div>
+
+ {% endblock %}
