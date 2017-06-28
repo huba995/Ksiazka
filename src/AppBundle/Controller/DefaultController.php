@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Comments;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class DefaultController extends Controller
 {
     /**
@@ -324,9 +324,10 @@ class DefaultController extends Controller
         $user=new User();
         $form=$this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
-
         if( $form->isSubmitted() && $form->isValid())
         {
+            $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
+            $user->setPassword($password);
             $em=$this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();

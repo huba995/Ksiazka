@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Validator\Constraint as AcmeAssert;
@@ -138,8 +139,8 @@ class User implements UserInterface, \Serializable
     public function setSurname($surname)
     {
         $this->surname = $surname;
-
         return $this;
+
     }
 
     /**
@@ -185,6 +186,8 @@ class User implements UserInterface, \Serializable
      */
     public function setPassword($password)
     {
+
+
         $this->password = $password;
 
         return $this;
