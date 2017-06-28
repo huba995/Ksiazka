@@ -41,9 +41,9 @@ class RegistrationService extends Controller
         $user->setPassword($password);
         $user->setIsactive(0);
 */
-        $sql='INSERT INTO user(name,surname,email,password,isactive) VALUES (:name,:surname,:email,:password,:isactive)';
+        $sql='INSERT INTO user(username,surname,email,password,isactive) VALUES (:username,:surname,:email,:password,:isactive)';
         $stmt=$this->connection->prepare($sql);
-        $stmt->execute(array(':name'=>$name,':surname'=>$surname,'email'=>$email,':password'=>$password, ':isactive'=>0));
+        $stmt->execute(array(':username'=>$name,':surname'=>$surname,'email'=>$email,':password'=>$password, ':isactive'=>1));
 
         // $stsm = $this->connection->getRepository(User::class);
 

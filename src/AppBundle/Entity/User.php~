@@ -3,15 +3,20 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Validator\Constraint as AcmeAssert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @UniqueEntity(fields="email", message="Ten email już istnieje, musisz użyć innego.")
  */
-class User
+class User implements UserInterface, \Serializable
 {
+    
     /**
      * @var int
      *
@@ -24,21 +29,31 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="username", type="string", length=255)
+     *@Assert\NotBlank(message="Pole nie może być puste!")
+     *
      */
-    private $name;
+    private $username;
 
     /**
      * @var string
      *
      * @ORM\Column(name="surname", type="string", length=255)
+     * @Assert\NotBlank(message="Pole nie może być puste!")
      */
     private $surname;
 
     /**
-     * @var string
      *
+     * @var string
+     * @Assert\Email()
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="Pole nie może być puste!")
+     * @Assert\Email(
+     *     message = "Nazwa maila '{{ value }}' nie jest poprawna.",
+     *     checkMX = true
+     *     )
+     *
      */
     private $email;
 
@@ -46,6 +61,14 @@ class User
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
+     * @Assert\NotBlank(message="Pole nie może być puste!")
+     *  * @Assert\Length(
+     *      min = 4,
+     *      max = 10,
+     *      minMessage = "Twoje hasło musi być większe niż {{ limit }} znaki",
+     *      maxMessage = "Twoje hasło musi mieć mniej niż  {{ limit }} znaków"
+     * )
+     * @AcmeAssert\NumberMust
      */
     private $password;
 
@@ -55,6 +78,20 @@ class User
      * @ORM\Column(name="isactive", type="boolean")
      */
     private $isactive;
+  //  private $username;
+    public function __construct()
+    {
+        $this->isactive = false;
+        // may not be needed, see section on salt below
+        // $this->salt = md5(uniqid(null, true));
+    }
+
+    public function getUsername()
+    {
+
+        return $this->username;
+        // TODO: Implement getUsername() method.
+    }
 
 
     /**
@@ -66,14 +103,14 @@ class User
     {
         return $this->id;
     }
-
+/*
     /**
      * Set name
      *
      * @param string $name
      *
      * @return User
-     */
+     *
     public function setName($name)
     {
         $this->name = $name;
@@ -85,12 +122,12 @@ class User
      * Get name
      *
      * @return string
-     */
+     *
     public function getName()
     {
         return $this->name;
     }
-
+*/
     /**
      * Set surname
      *
@@ -186,5 +223,43 @@ class User
     {
         return $this->isactive;
     }
-}
 
+    public function getSalt()
+    {
+        // you *may* need a real salt depending on your encoder
+        // see section on salt below
+        return null;
+    }
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->name,
+            $this->surname,
+            $this->password,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->name,
+            $this->password,
+            // see section on salt below
+            // $this->salt
+            ) = unserialize($serialized);
+    }
+    public function eraseCredentials()
+    {
+    }
+}

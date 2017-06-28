@@ -17,3 +17,6 @@ services:
     app.registration:
       class: AppBundle\Service\RegistrationService
       arguments: ['@doctrine.dbal.default_connection']
+    app.form_login_authenticator:
+        class: AppBundle\Security\FormLoginAuthenticator
+        arguments: ["@service_container"]

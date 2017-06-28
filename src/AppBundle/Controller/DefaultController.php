@@ -303,18 +303,19 @@ class DefaultController extends Controller
     }
 
     // Dodawanie logowania
-
+/*
     /**
-     * @Route("/logowanie", name="login")
+     * @Route("/logowanie")
      */
-
+/*
+ *
     public function loginAction(Request $request)
     {
         $form=$this->createForm(LoginType::class);
         $form->handleRequest($request);
         return $this->render('recipes/logowanie.html.twig',array('form'=>$form->createView(),));
     }
-
+*/
     /**
      * @Route("/rejestracja")
      */

@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class User implements UserInterface, \Serializable
 {
+    
     /**
      * @var int
      *
@@ -28,11 +29,11 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="username", type="string", length=255)
      *@Assert\NotBlank(message="Pole nie może być puste!")
      *
      */
-    private $name;
+    private $username;
 
     /**
      * @var string
@@ -77,16 +78,18 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="isactive", type="boolean")
      */
     private $isactive;
-
+  //  private $username;
     public function __construct()
     {
-        $this->isactive = false;
+        $this->isactive = true;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
     }
 
     public function getUsername()
     {
+
+        return $this->username;
         // TODO: Implement getUsername() method.
     }
 
@@ -100,14 +103,14 @@ class User implements UserInterface, \Serializable
     {
         return $this->id;
     }
-
+/*
     /**
      * Set name
      *
      * @param string $name
      *
      * @return User
-     */
+     *
     public function setName($name)
     {
         $this->name = $name;
@@ -119,12 +122,12 @@ class User implements UserInterface, \Serializable
      * Get name
      *
      * @return string
-     */
+     *
     public function getName()
     {
         return $this->name;
     }
-
+*/
     /**
      * Set surname
      *
@@ -237,7 +240,7 @@ class User implements UserInterface, \Serializable
     {
         return serialize(array(
             $this->id,
-            $this->name,
+            $this->username,
             $this->surname,
             $this->password,
             // see section on salt below
@@ -250,7 +253,7 @@ class User implements UserInterface, \Serializable
     {
         list (
             $this->id,
-            $this->name,
+            $this->username,
             $this->password,
             // see section on salt below
             // $this->salt
@@ -258,5 +261,19 @@ class User implements UserInterface, \Serializable
     }
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     *
+     * @return User
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
     }
 }
