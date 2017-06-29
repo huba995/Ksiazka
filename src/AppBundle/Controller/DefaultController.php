@@ -11,6 +11,7 @@ use AppBundle\Form\CommentType;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\RateType;
 use AppBundle\Form\RegistrationType;
+use AppBundle\Test\TestString;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -350,7 +351,8 @@ class DefaultController extends Controller
      */
     public function adminAction()
     {
-        return new Response('<html><body>Admin page!</body></html>');
+        return new Response('<html><body>Admin page, hello!</body></html>');
     }
+
 }
 
