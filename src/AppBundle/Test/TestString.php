@@ -18,7 +18,7 @@ class TestString
     }
     function FunctionTrim()
     {
-       trim($text);
+      return $this->text;
     }
 
 
