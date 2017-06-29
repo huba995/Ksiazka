@@ -16,10 +16,15 @@ class TestString
     {
         $this->text=$text;
     }
-    function FunctionTrim()
+    function something()
     {
-      return $this->text;
+       $trimmed=trim($this->text);
+       return $trimmed;
     }
-
+    function something2()
+    {
+        $subst=substr($this->text,0,-1);
+        return $subst;
+    }
 
 }
