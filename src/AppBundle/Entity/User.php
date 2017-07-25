@@ -94,7 +94,7 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->username;
         // TODO: Implement getUsername() method.
     }
-
+// wprowadzone jakies zmiany
 
     /**
      * Get id
